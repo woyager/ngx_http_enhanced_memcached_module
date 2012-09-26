@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) Igor Sysoev
  * Copyright (C) Nginx, Inc.
@@ -1084,6 +1083,8 @@ ngx_http_enhanced_memcached_process_request_get(ngx_http_request_t *r)
     ngx_http_upstream_t       *u;
     ngx_http_enhanced_memcached_ctx_t  *ctx;
     
+    int                         default_code = 1;
+    
     ctx = ngx_http_get_module_ctx(r, ngx_http_enhanced_memcached_module);
 
     if (ctx->key_status != READY) {
@@ -1217,6 +1218,13 @@ length:
               } else {
                   ngx_strlow(h->lowcase_key, h->key.data, h->key.len);
               }
+              
+              if (strncmp (h->lowcase_key,"x-status",9)==0){
+                  default_code=atoi(h->value.data);
+                  if (default_code==0){
+                      default_code=1;
+                  }
+              }
 
               hh = ngx_hash_find(&umcf->headers_in_hash, h->hash,
                                  h->lowcase_key, h->key.len);
@@ -1259,8 +1267,8 @@ length:
                   ims_memcached = ngx_http_parse_time(last_modified->value.data, last_modified->value.len);
 
                   if (ims_in == ims_memcached || (clcf->if_modified_since != NGX_HTTP_IMS_EXACT && ims_in >= ims_memcached)) {
-                    u->headers_in.status_n = 304;
-                    u->state->status = 304;
+                    u->headers_in.status_n = (default_code)?304:default_code;
+                    u->state->status = (default_code)?304:default_code;
 
                     u->headers_in.content_length_n = -1; 
                     if (u->headers_in.content_length) {
@@ -1286,8 +1294,8 @@ length:
 
               u->headers_in.content_length_n -= 2;
 
-              u->headers_in.status_n = 200;
-              u->state->status = 200;
+              u->headers_in.status_n = (default_code)?200:default_code;
+              u->state->status = (default_code)?200:default_code;
 
               return NGX_OK;
             }
@@ -1311,8 +1319,8 @@ length:
           return NGX_HTTP_INTERNAL_SERVER_ERROR;
         }
         
-        u->headers_in.status_n = 200;
-        u->state->status = 200;
+        u->headers_in.status_n = (default_code)?200:default_code;
+        u->state->status = (default_code)?200:default_code;
         u->keepalive = 1;
         
         return NGX_OK;
