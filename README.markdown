@@ -49,6 +49,15 @@ All commands and variables are prepàfixed by `enhanced`.
 
 * [`$enhanced_memcached_key`](http://wiki.nginx.org/HttpMemcachedModule#.24memcached_key)
 
+Custom HTTP Statuc
+===
+
+Push X-Status header with http status code
+
+	X-Status: 200
+
+and save it to memcache
+
 Custom HTTP Headers
 ===
 
