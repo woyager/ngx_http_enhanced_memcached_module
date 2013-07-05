@@ -1213,11 +1213,14 @@ length:
               ngx_cpystrn(h->key.data, r->header_name_start, h->key.len + 1);
               ngx_cpystrn(h->value.data, r->header_start, h->value.len + 1);
 
-              if (h->key.len == r->lowcase_index) {
+/*              if (h->key.len == r->lowcase_index) {
                 ngx_memcpy(h->lowcase_key, r->lowcase_header, h->key.len);
               } else {
                   ngx_strlow(h->lowcase_key, h->key.data, h->key.len);
               }
+*/
+
+		ngx_strlow(h->lowcase_key, h->key.data, h->key.len);
               
               if (strncmp (h->lowcase_key,"x-status",9)==0){
                   default_code=atoi(h->value.data);
