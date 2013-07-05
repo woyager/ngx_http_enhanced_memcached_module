@@ -1267,8 +1267,8 @@ length:
                   ims_memcached = ngx_http_parse_time(last_modified->value.data, last_modified->value.len);
 
                   if (ims_in == ims_memcached || (clcf->if_modified_since != NGX_HTTP_IMS_EXACT && ims_in >= ims_memcached)) {
-                    u->headers_in.status_n = (default_code)?304:default_code;
-                    u->state->status = (default_code)?304:default_code;
+                    u->headers_in.status_n = (default_code==1)?304:default_code;
+                    u->state->status = (default_code==1)?304:default_code;
 
                     u->headers_in.content_length_n = -1; 
                     if (u->headers_in.content_length) {
@@ -1294,8 +1294,8 @@ length:
 
               u->headers_in.content_length_n -= 2;
 
-              u->headers_in.status_n = (default_code)?200:default_code;
-              u->state->status = (default_code)?200:default_code;
+              u->headers_in.status_n = (default_code==1)?200:default_code;
+              u->state->status = (default_code==1)?200:default_code;
 
               return NGX_OK;
             }
@@ -1319,8 +1319,8 @@ length:
           return NGX_HTTP_INTERNAL_SERVER_ERROR;
         }
         
-        u->headers_in.status_n = (default_code)?200:default_code;
-        u->state->status = (default_code)?200:default_code;
+        u->headers_in.status_n = (default_code==1)?200:default_code;
+        u->state->status = (default_code==1)?200:default_code;
         u->keepalive = 1;
         
         return NGX_OK;
