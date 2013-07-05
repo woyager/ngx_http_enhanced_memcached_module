@@ -1219,9 +1219,7 @@ length:
                   ngx_strlow(h->lowcase_key, h->key.data, h->key.len);
               }
 
-//		ngx_strlow(h->lowcase_key, h->key.data, h->key.len);
-              
-              if (strncmp (h->lowcase_key,"x-status",9)==0){
+              if (strncmp (h->lowcase_key,"x-status",8)==0){
                   default_code=atoi(h->value.data);
                   if (default_code==0){
                       default_code=1;
