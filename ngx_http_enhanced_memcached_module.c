@@ -1221,7 +1221,7 @@ length:
               }
 
               if (ngx_strncmp (h->lowcase_key,"x-status",8)==0){
-                  default_code=atoi((const char*)h->value.data);
+                  default_code=ngx_atoi((const char*)h->value.data,h->value.len);
                   if (default_code==0){
                       default_code=1;
                   }
